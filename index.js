@@ -2,28 +2,30 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 
-const credentialList = []
-app.post('/signup', (req, res)=>{
-    const { fullName, emailid, phoneNumber, password, address} = req.body;
-    if(!fullName||!emailid||!password||!phoneNuumber||!address){
-        res.send({
-            message:"Please enter valid details"
-        })
-    }
+app.use(express.json());
+app.use(cors());
 
-    for (let i = 0; i < credentialList.length; i++) {
-        if (credentialList[i].emailid == emailid) {
-            res.json({message: "user already exists"});
+const credentialsList = []
+app.post('/signup', (req, res) => {
+    const { fullName, email, password, phoneNumber, add } = req.body;
+
+    console.log(fullName, email, password, phoneNumber, add);
+    if (!fullName || !email || !phoneNumber || !password || !add) {
+        res.json({ message: "please enter valid cred" });
+        return;
+    }
+    for (let i = 0; i < credentialsList.length; i++) {
+        if (credentialsList[i].email == email) {
+            res.json({ message: "user already exist" });
             return;
         }
     }
-    credentialList.push({fullName, emailid, password, phoneNumber, address});
-    console.log(credentialList);
-    res.json({message: "user created successfully"});
-
+    credentialsList.push({ fullName, email, phoneNumber, password, add });
+    console.log(credentialsList);
+    res.json({ message: "user created successfully" });
 });
 
 
-app.listen(3001, ()=>{
+app.listen(3001, () => {
     console.log("server is running in 3001 port");
 })
